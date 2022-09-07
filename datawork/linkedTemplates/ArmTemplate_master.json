@@ -1,0 +1,153 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "datawork"
+		},
+		"AzureBlobStorage1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureBlobStorage1'"
+		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
+		"AzureDatabricks2_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks2'"
+		},
+		"AzureDatabricksDeltaLake1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricksDeltaLake1'"
+		},
+		"AzureDatabrickslink_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabrickslink'"
+		},
+		"AzureDatalinkdata_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatalinkdata'"
+		},
+		"Azurelink32_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'Azurelink32'"
+		},
+		"Azurelinkser1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'Azurelinkser1'"
+		},
+		"link1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'link1'"
+		},
+		"ls_AzureBlobStorage_output_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_AzureBlobStorage_output'"
+		},
+		"ls_AzureSqlDatabase_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'ls_AzureSqlDatabase'"
+		},
+		"AzureDatabrickslink_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0901-121411-5c5f9745"
+		},
+		"AzureDatalinkdata_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0901-121411-5c5f9745"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "datawork_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureBlobStorage1_connectionString": {
+						"value": "[parameters('AzureBlobStorage1_connectionString')]"
+					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
+					},
+					"AzureDatabricks2_accessToken": {
+						"value": "[parameters('AzureDatabricks2_accessToken')]"
+					},
+					"AzureDatabricksDeltaLake1_accessToken": {
+						"value": "[parameters('AzureDatabricksDeltaLake1_accessToken')]"
+					},
+					"AzureDatabrickslink_accessToken": {
+						"value": "[parameters('AzureDatabrickslink_accessToken')]"
+					},
+					"AzureDatalinkdata_accessToken": {
+						"value": "[parameters('AzureDatalinkdata_accessToken')]"
+					},
+					"Azurelink32_accessToken": {
+						"value": "[parameters('Azurelink32_accessToken')]"
+					},
+					"Azurelinkser1_accessToken": {
+						"value": "[parameters('Azurelinkser1_accessToken')]"
+					},
+					"link1_connectionString": {
+						"value": "[parameters('link1_connectionString')]"
+					},
+					"ls_AzureBlobStorage_output_connectionString": {
+						"value": "[parameters('ls_AzureBlobStorage_output_connectionString')]"
+					},
+					"ls_AzureSqlDatabase_connectionString": {
+						"value": "[parameters('ls_AzureSqlDatabase_connectionString')]"
+					},
+					"AzureDatabrickslink_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatabrickslink_properties_typeProperties_existingClusterId')]"
+					},
+					"AzureDatalinkdata_properties_typeProperties_existingClusterId": {
+						"value": "[parameters('AzureDatalinkdata_properties_typeProperties_existingClusterId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "datawork_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'datawork_ArmTemplate_0')]"
+			]
+		}
+	]
+}
