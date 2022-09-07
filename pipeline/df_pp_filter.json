@@ -1,9 +1,9 @@
 {
-	"name": "df_pp_agg",
+	"name": "df_pp_filter",
 	"properties": {
 		"activities": [
 			{
-				"name": "dataflow1",
+				"name": "df_filter",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "df_agg",
+						"referenceName": "df_filter",
 						"type": "DataFlowReference"
 					},
 					"compute": {

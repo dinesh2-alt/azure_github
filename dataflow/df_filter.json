@@ -1,5 +1,5 @@
 {
-	"name": "df_agg",
+	"name": "df_filter",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -23,7 +23,7 @@
 			],
 			"transformations": [
 				{
-					"name": "aggregate1"
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
@@ -35,11 +35,10 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 aggregate(groupBy(id),",
-				"     totalcount = count(id)) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"source1 filter(equals(id,2)) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['df_agg_output'],",
+				"     partitionFileNames:['df_filter'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     partitionBy('hash', 1)) ~> sink1"

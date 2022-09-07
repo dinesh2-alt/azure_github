@@ -1,5 +1,5 @@
 {
-	"name": "df_agg",
+	"name": "df_join",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -10,20 +10,19 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				}
-			],
-			"sinks": [
+				},
 				{
 					"dataset": {
-						"referenceName": "ds_DelimitedText_output",
+						"referenceName": "ds_AzureSqlTable_row",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "rows"
 				}
 			],
+			"sinks": [],
 			"transformations": [
 				{
-					"name": "aggregate1"
+					"name": "join1"
 				}
 			],
 			"scriptLines": [
@@ -35,14 +34,19 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 aggregate(groupBy(id),",
-				"     totalcount = count(id)) ~> aggregate1",
-				"aggregate1 sink(allowSchemaDrift: true,",
+				"source(output(",
+				"          id as integer,",
+				"          names as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['df_agg_output'],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> rows",
+				"rows join(id == ERROR_FUNCTION(''),",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1"
 			]
 		}
 	}
