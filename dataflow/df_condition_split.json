@@ -1,5 +1,5 @@
 {
-	"name": "df_join",
+	"name": "df_condition_split",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -10,13 +10,6 @@
 						"type": "DatasetReference"
 					},
 					"name": "source1"
-				},
-				{
-					"dataset": {
-						"referenceName": "ds_AzureSqlTable_row",
-						"type": "DatasetReference"
-					},
-					"name": "rows"
 				}
 			],
 			"sinks": [
@@ -26,11 +19,18 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_DelimitedText_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
 				}
 			],
 			"transformations": [
 				{
-					"name": "join1"
+					"name": "below2"
 				}
 			],
 			"scriptLines": [
@@ -42,25 +42,20 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source(output(",
-				"          id as integer,",
-				"          names as string",
-				"     ),",
-				"     allowSchemaDrift: true,",
+				"source1 split(greater(id, 2),",
+				"     disjoint: false) ~> below2@(below2, greater2)",
+				"below2@below2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     isolationLevel: 'READ_UNCOMMITTED',",
-				"     format: 'table') ~> rows",
-				"source1, rows join(source1@id == rows@id,",
-				"     joinType:'inner',",
-				"     matchType:'exact',",
-				"     ignoreSpaces: false,",
-				"     broadcast: 'auto')~> join1",
-				"join1 sink(allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     partitionFileNames:['df_join'],",
+				"     partitionFileNames:['condition_split_below2'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     partitionBy('hash', 1)) ~> sink1",
+				"below2@greater2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['contionsplitgreterthan2'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
 			]
 		}
 	}
