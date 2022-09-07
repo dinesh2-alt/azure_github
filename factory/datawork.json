@@ -1,0 +1,9 @@
+{
+	"name": "datawork",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f1b9ff54-42d6-4686-821c-5b5142105d53",
+		"tenantId": "c5b6eb5d-81db-4809-b9ac-2d5e6cb3f938"
+	}
+}
